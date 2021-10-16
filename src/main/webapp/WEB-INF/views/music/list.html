@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<a href="/song/create">CreateSong</a>
+<form action="/song">
+    <input type="text" name="q" placeholder="search...">
+    <button>Search</button>
+</form>
+<table>
+    <tr>
+        <td>#</td>
+        <td>Name</td>
+        <td>Artist</td>
+        <td>Category</td>
+        <td>File</td>
+    </tr>
+    <tr th:each="song : ${songs}">
+        <td th:text="${song.id}"></td>
+        <td th:text="${song.name}"></td>
+        <td th:text="${song.artist}"></td>
+        <td th:text="${song.category}"></td>
+        <td th:text="${song.file}"></td>
+        <td><a th:href="@{/song/edit/{id}(id=${song.id})}">Edit</a></td>
+        <td><a th:href="@{/song/info/{id}(id=${song.id})}">Info</a></td>
+        <td><a th:href="@{/song/delete/{id}(id=${song.id})}">Delete</a></td>
+    </tr>
+</table>
+</body>
+</html>
