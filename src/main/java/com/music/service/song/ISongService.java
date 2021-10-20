@@ -2,9 +2,10 @@ package com.music.service.song;
 
 import com.music.model.Song;
 import com.music.service.IGeneralService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 
 public interface ISongService extends IGeneralService<Song> {
-    List<Song> getByName(String name);
+    Page<Song> findSongsByArtistContaining(String artist, Pageable pageable);
 }

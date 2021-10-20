@@ -5,16 +5,20 @@ import com.music.model.SongForm;
 import com.music.service.song.ISongService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -27,13 +31,13 @@ public class SongController {
     private String fileUpload;
 
     @GetMapping("")
-    public String showAll(@RequestParam("q") Optional<String> name, Model model) {
+    public String showAll(@RequestParam("q") Optional<String> name, Model model, @PageableDefault(size = 2) Pageable pageable) {
         if (name.isPresent()) {
             String name1 = name.get();
-            List<Song> songs = songService.getByName(name1);
+            Page<Song> songs = songService.findSongsByArtistContaining(name1, pageable);
             model.addAttribute("songs", songs);
         } else {
-            model.addAttribute("songs", songService.getAll());
+            model.addAttribute("songs", songService.findAll(pageable));
         }
         return "music/list";
     }
@@ -46,7 +50,10 @@ public class SongController {
     }
 
     @PostMapping("/create")
-    public String createSong(@ModelAttribute("songForm") SongForm songForm) {
+    public String createSong(@Validated @ModelAttribute("songForm") SongForm songForm, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "/music/create";
+        }
         MultipartFile file = songForm.getFile();
         String fileName = file.getOriginalFilename();
         Song song = new Song(songForm.getId(), songForm.getName(), songForm.getArtist(), songForm.getCategory(), fileName);
@@ -63,9 +70,13 @@ public class SongController {
 
     @GetMapping("/edit/{id}")
     public ModelAndView showEdit(@PathVariable("id") Long id) {
-        Song song = songService.getById(id);
         ModelAndView modelAndView = new ModelAndView("/music/edit");
-        modelAndView.addObject("song", song);
+        Optional<Song> songOptional = songService.getById(id);
+        if (songOptional.isPresent()) {
+            modelAndView.addObject("song", songOptional.get());
+        } else {
+            modelAndView.addObject("song", new Song());
+        }
         return modelAndView;
     }
 
@@ -77,8 +88,8 @@ public class SongController {
 
     @GetMapping("/delete/{id}")
     public String showDelete(@PathVariable("id") Long id, Model model) {
-        Song song = songService.getById(id);
-        model.addAttribute("song", song);
+        Optional<Song> song = songService.getById(id);
+        model.addAttribute("song", song.get());
         return "/music/delete";
     }
 

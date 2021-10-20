@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -34,6 +36,8 @@ import java.util.Properties;
 @Configuration
 @EnableWebMvc
 @ComponentScan("com.music")
+@EnableJpaRepositories("com")
+@EnableSpringDataWebSupport
 @EnableTransactionManagement
 @PropertySource("classpath:upload_file.properties")
 public class ApplicationConfig implements WebMvcConfigurer, ApplicationContextAware {

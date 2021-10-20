@@ -3,13 +3,27 @@ package com.music.model;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 public class SongForm {
+
     private Long id;
 
+    @NotEmpty(message = "khong duoc de trong")
+    @Size(max = 800, message = "khong qua 800 ky tu")
+    @Pattern(regexp = "^\\w+$", message = "khong chua ky tu dac biet")
     private String name;
 
+    @NotEmpty(message = "khong duoc de trong")
+    @Size(max = 300, message = "khong qua 300 ky tu")
+    @Pattern(regexp = "^\\w+$", message = "khong chua ky tu dac biet")
     private String artist;
 
+    @NotEmpty(message = "khong duoc de trong")
+    @Size(max = 1000, message = "khong quas 1000 ky tu")
+    @Pattern(regexp = "^[^,]+$", message = "khong chua dau ,")
     private String category;
 
     private MultipartFile file;

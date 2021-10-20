@@ -1,14 +1,18 @@
 package com.music.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
+import java.util.Optional;
 
 public interface IGeneralService<T> {
-    List<T> getAll();
+    Page<T> findAll(Pageable pageable);
 
-    void save(T t);
+    T save(T t);
 
     void delete(Long id);
 
-    T getById(Long id);
+    Optional<T> getById(Long id);
 
 }

@@ -29,5 +29,12 @@
         <td><a th:href="@{/song/delete/{id}(id=${song.id})}">Delete</a></td>
     </tr>
 </table>
+<div>
+    <a th:if="${songs.hasPrevious()}" th:href="@{/song?page=__${songs.number - 1}__}">Previous</a>
+    <a th:if="${songs.isFirst()}" disabled>Previous</a>
+    <span th:text="${songs.number + 1}"></span>/ <span th:text="${songs.totalPages}"></span>
+    <a th:if="${songs.hasNext()}" th:href="@{/song?page=__${songs.number + 1}__}">Next</a>
+    <a th:if="${songs.isLast()}" disabled>Next</a>
+</div>
 </body>
 </html>

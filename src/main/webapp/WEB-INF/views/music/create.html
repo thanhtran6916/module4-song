@@ -7,13 +7,16 @@
 <body>
 <form th:object="${songForm}" method="post" enctype="multipart/form-data">
     <p>Song Name</p>
-    <input type="text" name="name">
+    <input type="text" th:field="*{name}">
+    <p th:if="${#fields.hasErrors()}" th:errors="*{name}"></p>
     <p>Artist</p>
-    <input type="text" name="artist">
+    <input type="text" th:field="*{artist}">
+    <p th:if="${#fields.hasErrors()}" th:errors="*{artist}"></p>
     <p>Category</p>
-    <input type="text" name="category">
+    <input type="text" th:field="*{category}">
+    <p th:if="${#fields.hasErrors()}" th:errors="*{category}"></p>
     <p>File</p>
-    <input type="file" name="file">
+    <input type="file" th:field="*{file}">
     <p></p>
     <button>Save</button>
 </form>
